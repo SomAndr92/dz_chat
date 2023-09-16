@@ -105,9 +105,15 @@
 
     mess.addEventListener('keyup', event => {
       if (event.code === 'Enter') {
-        socket.send(name.value + ": " + mess.value);
-
-        mess.value = "";
+        let msg = {
+        "name": name.value,
+        "to": nameto.value,
+        "message": mess.value
+      };
+      
+      socket.send(JSON.stringify(msg));
+      chatWindow.innerHTML += '<div>' + name.value + ": " + mess.value + '</div>'
+      mess.value = "";
       }
     });
 
