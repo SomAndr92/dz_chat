@@ -1,0 +1,50 @@
+#chat {
+    width: 500px;
+    height: 500px;
+
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    background-color: rgb(228, 227, 238);
+}
+
+body {
+    background-color: rgb(93, 93, 99);
+}
+
+.pole {
+    width: 500px;
+    margin: 0 auto;
+    display: grid;
+    /* ! */
+    grid-template-areas:
+        "A A B B "
+        "C C C D";
+    gap: 10px;
+}
+
+.box-1 {
+    grid-area: A;
+}
+
+.box-2 {
+    grid-area: B;
+}
+
+.box-3 {
+    grid-area: C;
+}
+
+.box-4 {
+    grid-area: D;
+}
+
+.mess{
+    background-color: rgb(165, 160, 223);
+    width: max-content;
+    border-radius: 7px;
+    margin-left: 100px;
+    
+}
+

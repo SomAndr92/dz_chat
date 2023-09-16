@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
+</head>
+
+<body>
+  
+    <div id="chat" class="border border-warning fst-italic">
+
+    </div>
+    <div class="pole">
+      <input type="text" id="name" placeholder="nickname" class="form-control box-1">
+      <input type="text" id="to" placeholder="Кому" class="form-control box-2">
+      <input type="text" id="field_send" placeholder="Введите сообщение" class="form-control box-3">
+      <button class="btn btn-primary  box-4" id="btn_send">Отправить</button>
+    </div>
+  
+  <script>
+    // const socket = new WebSocket('ws://127.0.0.1:8888');
+
+    // Событие открытия соединения
+    // socket.addEventListener('open', (event) => {
+    //   console.log('Соединение установлено');
+
+    //   // Отправка сообщения на сервер после установки соединения
+    //   socket.send('Привет, сервер!');
+    // });
+
+    // // Событие приема сообщения от сервера
+    // socket.addEventListener('message', (event) => {
+    //   const messageFromServer = event.data;
+    //   console.log('Получено сообщение от сервера: ' + messageFromServer);
+
+    //   // Вы можете обработать сообщение здесь
+    // });
+
+    // // Событие закрытия соединения
+    // socket.addEventListener('close', (event) => {
+    //   if (event.wasClean) {
+    //     console.log('Соединение закрыто чисто, код: ' + event.code + ', причина: ' + event.reason);
+    //   } else {
+    //     console.error('Соединение разорвано');
+    //   }
+    // });
+
+    // // Событие ошибки
+    // socket.addEventListener('error', (error) => {
+    //   console.error('Произошла ошибка: ' + error.message);
+    // });
+
+
+    let btn = document.getElementById("btn_send");
+    let mess = document.getElementById("field_send");
+    let name = document.getElementById("name");
+    let nameto = document.getElementById("to");
+
+    const socket = new WebSocket('ws://127.0.0.1:8888');
+
+    let chatWindow = document.getElementById("chat");
+    // Событие приема сообщения от сервера
+    socket.onmessage = (event) => {
+      const messageFromServer = JSON.parse(event.data);
+
+      let name = document.getElementById("name");
+      if (messageFromServer['to'] == name.value) {
+        chatWindow.innerHTML += '<div class="mess">' + messageFromServer['name'] + ": " + messageFromServer['message'] + '</div>'
+        console.log('Получено сообщение от сервера: ' + messageFromServer);
+      }
+
+
+    };
+
+    // Событие ошибки
+    socket.onerror = (error) => {
+      console.error('Произошла ошибка: ' + error.message);
+    };
+
+    // Событие закрытия соединения
+    socket.onclose = (event) => {
+      if (event.wasClean) {
+        console.log('Соединение закрыто чисто, код: ' + event.code + ', причина: ' + event.reason);
+      } else {
+        console.error('Соединение разорвано');
+      }
+    };
+
+    // Событие открытия соединения
+    socket.onopen = (event) => {
+      console.log('Соединение установлено');
+
+      // Отправка сообщения на сервер после установки соединения
+      // socket.send('Новый пользователь!');
+    };
+
+
+
+
+
+    mess.addEventListener('keyup', event => {
+      if (event.code === 'Enter') {
+        socket.send(name.value + ": " + mess.value);
+
+        mess.value = "";
+      }
+    });
+
+    mess.addEventListener('keyup', event => {
+      if (event.code === 'CapsLock') {
+        alert('CAPS')
+      }
+    });
+
+    btn.addEventListener("click", function () {
+
+      let msg = {
+        "name": name.value,
+        "to": nameto.value,
+        "message": mess.value
+      };
+      //socket.send(name.value + ": " + mess.value);
+      socket.send(JSON.stringify(msg));
+      chatWindow.innerHTML += '<div>' + name.value + ": " + mess.value + '</div>'
+      mess.value = "";
+
+
+    });
+
+
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
